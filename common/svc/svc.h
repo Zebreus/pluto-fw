@@ -9,7 +9,6 @@
 #include "chro.h"
 #include "alarm.h"
 #include "countdown.h"
-#include "backlight.h"
 #include "compass.h"
 #include "init.h"
 #include "otp.h"
