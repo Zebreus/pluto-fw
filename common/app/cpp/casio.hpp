@@ -3,7 +3,6 @@ extern "C" {
 #include "common/hal/hal.h"
 #include "common/hal/lcd_segments.h"
 }
-#include "beeper.hpp"
 
 enum Button {
     Light,

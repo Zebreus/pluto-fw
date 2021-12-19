@@ -18,9 +18,6 @@ void svc_aux_timer_set_required(svc_aux_timer_required_t which, uint8_t state) {
 }
 
 void svc_aux_timer_handler(void) {
-	if(aux_timer_req & SVC_AUX_TIMER_REQUIRED_BEEP) {
-		svc_aux_timer_beep_handler();
-	}
 	if(aux_timer_req & SVC_AUX_TIMER_REQUIRED_MELODY) {
 		svc_aux_timer_melody_handler();
 	}

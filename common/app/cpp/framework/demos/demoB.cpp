@@ -4,7 +4,6 @@ std::vector<ComponentData*> zeroes(State* state, const std::vector<int>& params)
     auto mode = useGlobalState<3,bool>(false);
         state->text[0] = mode ? '1' : '0';
         state->text[1] = '0';
-        state->text[2] = '0';
         state->text[3] = '1';
         state->text[4] = '2';
 
@@ -15,7 +14,6 @@ std::vector<ComponentData*> ones(State* state, const std::vector<int>& params){
     auto mode = useGlobalState<3,bool>(false);
         state->text[0] = mode ? '1' : '0';
         state->text[1] = '1';
-        state->text[2] = '1';
         state->text[3] = '0';
         state->text[4] = '2';
 
@@ -47,7 +45,8 @@ std::vector<ComponentData*> demoB(State* state, const std::vector<int>& params){
     state->text[7] = value;
     state->text[8] = value;
     state->text[9] = value;
-    state->backlight = true;
+    state->backlight = alarm?true:false;
+    state->beeper = alarm?true:false;
 
     return { new ComponentData(alarm ? zeroes : ones, {}), new ComponentData(showAlarm, {1}), new ComponentData(showAlarm, {2}) };
 }

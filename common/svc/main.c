@@ -14,7 +14,6 @@ void svc_main_proc(svc_main_proc_event_t event) {
 		svc_alarm_clear_pending();
 		svc_countdown_clear_pending();
 		keypress = 1;
-		svc_beep_key();
 	}
 	if(event & SVC_MAIN_PROC_EVENT_AUX_TIMER) {
 		svc_aux_timer_handler();
@@ -79,6 +78,4 @@ void svc_main_proc(svc_main_proc_event_t event) {
 		svc_countdown_draw_popup();
 		svc_alarm_draw_popup();
 	}
-
-	svc_beep_hour();
 }

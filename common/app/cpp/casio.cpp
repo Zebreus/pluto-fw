@@ -22,7 +22,6 @@ void Casio::onShortPress(const Button& b){
 }
 
 void Casio::onLongPress(const Button& b){
-    Beeper::beep();
 }
 
 void Casio::onAuxTimer(){

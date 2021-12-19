@@ -29,7 +29,7 @@ void State::realize(){
         hal_backlight_set(backlight.value() ? 10 : 0);
     }
     if(beeper.has_value()){
-        hal_beep(beeper.value() ? 700 : 0);
+        hal_beep(beeper.value() ? 550 : 0);
     }
     for(int i = 0 ; i<10;i++){
         if(text[i].has_value()){
