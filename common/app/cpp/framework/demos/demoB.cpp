@@ -2,20 +2,16 @@
 
 std::vector<ComponentData*> zeroes(State* state, const std::vector<int>& params){
     auto mode = useGlobalState<3,bool>(false);
-        state->text[0] = mode ? '1' : '0';
-        state->text[1] = '0';
-        state->text[3] = '1';
-        state->text[4] = '2';
+        state->text[9] = mode ? '1' : '0';
+
 
     return {};
 }
 
 std::vector<ComponentData*> ones(State* state, const std::vector<int>& params){
     auto mode = useGlobalState<3,bool>(false);
-        state->text[0] = mode ? '1' : '0';
-        state->text[1] = '1';
-        state->text[3] = '0';
-        state->text[4] = '2';
+        state->text[8] = mode ? '1' : '0';
+     
 
     return {};
 }
@@ -28,6 +24,27 @@ std::vector<ComponentData*> showAlarm(State* state, const std::vector<int>& para
     return {};
 }
 
+std::vector<ComponentData*> showTime(State* state, const std::vector<int>& params){
+auto time = useGlobalState<4,unsigned long long>(0);
+auto unixTime = time;
+auto seconds = unixTime/1000;
+auto secondsA = seconds%10;
+auto secondsB = (seconds/10)%6;
+auto minutes = seconds/60;
+auto minutesA = minutes%10;
+auto minutesB = (minutes/10)%6;
+auto hours = (minutes/60)%24;
+auto hoursA = hours%10;
+auto hoursB = hours/10;
+state->text[0] = 48 + hoursB;
+state->text[1] = 48 + hoursA;
+state->text[2] = 48 + minutesB;
+state->text[3] = 48 + minutesA;
+state->text[4] = 48 + secondsB;
+state->text[5] = 48 + secondsA;
+return {};
+}
+
 std::vector<ComponentData*> demoB(State* state, const std::vector<int>& params){
     volatile int x = 0;
     auto test = useState<int>(7);
@@ -35,18 +52,8 @@ std::vector<ComponentData*> demoB(State* state, const std::vector<int>& params){
 
     
     const char value = '2' ;
-    state->text[0] = value;
-    state->text[1] = value;
-    state->text[2] = value;
-    state->text[3] = value;
-    state->text[4] = value;
-    state->text[5] = value;
-    state->text[6] = value;
-    state->text[7] = value;
-    state->text[8] = value;
-    state->text[9] = value;
     state->backlight = alarm?true:false;
     state->beeper = alarm?true:false;
 
-    return { new ComponentData(alarm ? zeroes : ones, {}), new ComponentData(showAlarm, {1}), new ComponentData(showAlarm, {2}) };
+    return { new ComponentData(showTime,{}), new ComponentData(showAlarm, {6}), new ComponentData(showAlarm, {7}) };
 }

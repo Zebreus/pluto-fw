@@ -20,9 +20,12 @@ void processEvent(const Event& event){
     auto alarm = useGlobalState<1,bool>(false);
     auto mode = useGlobalState<2,bool>(false);
     auto light = useGlobalState<3,bool>(false);
-    auto time = useGlobalState<4,unsigned int>(0);
+    auto time = useGlobalState<4,unsigned long long>(0);
     current = lastCurrent;
 
+    if(auto alarmDown = std::get_if<TickEvent>(&event)){
+        time.set(time + 250);
+    }
     if(auto alarmDown = std::get_if<AlarmDownEvent>(&event)){
         alarm.set(true);
     }

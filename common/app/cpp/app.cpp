@@ -13,7 +13,7 @@ Casio casio;
 static void coolfunction(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
     if(event & SVC_MAIN_PROC_EVENT_TICK) {
         //casio.onTick();
-        //trigger(TickEvent());
+        trigger(TickEvent());
     }
 
     if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG) {
