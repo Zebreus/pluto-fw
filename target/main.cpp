@@ -60,7 +60,6 @@ extern "C" int main(void)
 	}
 
 	//hal_compass_init();
-	hal_backlight_set(1);
 	svc_init();
 
 	__nop();

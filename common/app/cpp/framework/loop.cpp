@@ -24,7 +24,10 @@ void processEvent(const Event& event){
     current = lastCurrent;
 
     if(auto alarmDown = std::get_if<TickEvent>(&event)){
-        time.set(time + 250);
+        hal_rtc_timedate_t td;
+	    hal_rtc_get(&td);
+        auto newTime = (td.s+(td.m*60)+(td.h*60*60))*1000;
+        time.set(newTime);
     }
     if(auto alarmDown = std::get_if<AlarmDownEvent>(&event)){
         alarm.set(true);

@@ -53,7 +53,7 @@ std::vector<ComponentData*> demoB(State* state, const std::vector<int>& params){
     
     const char value = '2' ;
     state->backlight = alarm?true:false;
-    state->beeper = alarm?true:false;
+    // state->beeper = alarm?true:false;
 
     return { new ComponentData(showTime,{}), new ComponentData(showAlarm, {6}), new ComponentData(showAlarm, {7}) };
 }
