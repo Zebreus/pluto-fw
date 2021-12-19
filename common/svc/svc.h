@@ -7,8 +7,6 @@
 #include "beep.h"
 #include "melody.h"
 #include "chro.h"
-#include "alarm.h"
-#include "countdown.h"
 #include "compass.h"
 #include "init.h"
 #include "otp.h"

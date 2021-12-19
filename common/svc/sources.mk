@@ -6,8 +6,6 @@ SRC += ../common/svc/lcd.c \
        ../common/svc/beep.c \
        ../common/svc/melody.c \
        ../common/svc/chro.c \
-       ../common/svc/alarm.c \
-       ../common/svc/countdown.c \
        ../common/svc/compass.c \
        ../common/svc/init.c \
        ../common/svc/otp.c \

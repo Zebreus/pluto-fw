@@ -1,6 +1,6 @@
 #include "apps.h"
 
-const app_t *app_current = &app_app_time;
+const app_t *app_current = &app_app_cpp;
 uint8_t app_view_changed = 1;
 static const app_t *app_current_next = &app_app_time;
 
@@ -10,13 +10,6 @@ void app_launch(const app_t *app) {
 
 void app_exit(void) {
 	app_launch(&app_app_launcher);
-}
-
-void app_current_update(void) {
-	if(app_current_next != app_current) {
-		app_view_changed = 1;
-	}
-	app_current = app_current_next;
 }
 
 void app_set_view(const app_t *app, uint8_t view) {

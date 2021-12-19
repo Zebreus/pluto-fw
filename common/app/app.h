@@ -31,5 +31,4 @@ extern uint8_t app_view_changed;
 
 void app_launch(const app_t *app);
 void app_exit(void);
-void app_current_update(void);
 void app_set_view(const app_t *app, uint8_t view);

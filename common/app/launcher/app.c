@@ -26,11 +26,6 @@ static const svc_menu_item_text_t menu_item0 = {
 	.handler = launch,
 	.user_data = (void *)&app_app_time,
 };
-// static const svc_menu_item_text_t menu_item1 = {
-// 	.text = "ctdn",
-// 	.handler = launch,
-// 	.user_data = (void *)&app_app_countdown,
-// };
 // static const svc_menu_item_text_t menu_item2 = {
 // 	.text = " alarm",
 // 	.handler = launch,
