@@ -25,17 +25,17 @@ std::vector<ComponentData*> showAlarm(State* state, const std::vector<int>& para
 }
 
 std::vector<ComponentData*> showTime(State* state, const std::vector<int>& params){
-auto time = useGlobalState<4,unsigned long long>(0);
-auto unixTime = time;
-auto seconds = unixTime/1000;
-auto secondsA = seconds%10;
-auto secondsB = (seconds/10)%6;
-auto minutes = seconds/60;
-auto minutesA = minutes%10;
-auto minutesB = (minutes/10)%6;
-auto hours = (minutes/60)%24;
-auto hoursA = hours%10;
-auto hoursB = hours/10;
+unsigned long time = useGlobalState<4,unsigned long>(0);
+unsigned long unixTime = time;
+unsigned long seconds = unixTime/1000;
+unsigned long secondsA = seconds%10;
+unsigned long secondsB = (seconds/10)%6;
+unsigned long  minutes = seconds/60;
+unsigned long  minutesA = minutes%10;
+unsigned long  minutesB = (minutes/10)%6;
+unsigned long  hours = (minutes/60)%24;
+unsigned long  hoursA = hours%10;
+unsigned long  hoursB = hours/10;
 state->text[0] = 48 + hoursB;
 state->text[1] = 48 + hoursA;
 state->text[2] = 48 + minutesB;

@@ -1,6 +1,7 @@
 #include "loop.hpp"
 
-static ComponentData* rootComponent = nullptr;
+static ComponentData rootComponentV(&root, {});
+static ComponentData* rootComponent = &rootComponentV;
 
 /** Signal a trigger from an external event  */
 void trigger(const Event& event){
@@ -20,14 +21,18 @@ void processEvent(const Event& event){
     auto alarm = useGlobalState<1,bool>(false);
     auto mode = useGlobalState<2,bool>(false);
     auto light = useGlobalState<3,bool>(false);
-    auto time = useGlobalState<4,unsigned long long>(0);
+    auto time = useGlobalState<4,unsigned long>(0);
     current = lastCurrent;
 
     if(auto alarmDown = std::get_if<TickEvent>(&event)){
-        hal_rtc_timedate_t td;
+         hal_rtc_timedate_t td;
 	    hal_rtc_get(&td);
-        auto newTime = (td.s+(td.m*60)+(td.h*60*60))*1000;
-        time.set(newTime);
+        unsigned long seconds = td.s;
+        unsigned long minutes = td.m;
+        unsigned long hours = td.h;
+        unsigned long newTime = (seconds+(minutes*60ul)+(hours*60ul*60ul))*1000ul;
+         unsigned long nt2 = newTime;
+        time.set(nt2);
     }
     if(auto alarmDown = std::get_if<AlarmDownEvent>(&event)){
         alarm.set(true);

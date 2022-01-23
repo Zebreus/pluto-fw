@@ -43,11 +43,9 @@ void ComponentData::render(){
     current = this;
 
     auto result = (*(current->function))(state.get(), current->lastParams);
-
     for(ComponentData* old : lastResult){
         delete old;
     }
-
     current->lastResult = result;
 
     current = lastCurrent;

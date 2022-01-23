@@ -22,7 +22,7 @@ public:
         }
     }
     const ValueType& get() const{
-        return value; 
+        return value;
     }
 };
 

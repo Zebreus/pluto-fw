@@ -18,6 +18,7 @@ public:
     GlobalActionValue(ValueType& realValue, ComponentData* (&components)[8]): value(realValue), realValue(realValue),components(components){}
     operator const ValueType&() const { return value; }
     void set(const ValueType& newValue){
+        volatile ValueType x = newValue;
         if(realValue != newValue){
             realValue = newValue;
             for(auto component: components){

@@ -40,6 +40,9 @@ inline svc_main_proc_event_t operator|=(svc_main_proc_event_t& a, const svc_main
 	return a;
 }
 
+// Link to userguide
+// https://www.ti.com/lit/ug/slau367p/slau367p.pdf
+
 extern "C" int main(void)
 {
 	PM5CTL0 &= ~LOCKLPM5;
@@ -51,7 +54,8 @@ extern "C" int main(void)
 	button_init();
 	aux_timer_init();
 
-	uint16_t reset_reason = hal_debug_read(0);
+#pragma optimize("", off)
+	volatile uint16_t reset_reason = hal_debug_read(0);
 	if(reset_reason) {
 		beep_init(0);
 	}
@@ -77,6 +81,7 @@ extern "C" int main(void)
 	// }
 
 	int counter = 0;
+	#pragma optimize("", on)
 	while(1) {
 
 		svc_main_proc_event_t ev = SVC_MAIN_PROC_NO_EVENT;
@@ -114,6 +119,7 @@ extern "C" int main(void)
 		if(aux_timer_event) {
 			ev |= SVC_MAIN_PROC_EVENT_AUX_TIMER;
 		}
+		volatile auto hnetaathn = 55;
 		if(ev) {
 			P9OUT |= BIT5;
 			wdt_clear();
@@ -128,6 +134,8 @@ extern "C" int main(void)
 			aux_timer_event = 0;
 		}
 
+	    // Chapter 1.4.2
+		// LPM3 exit on timer a
 		LPM3;
 	}
 	return 0;
