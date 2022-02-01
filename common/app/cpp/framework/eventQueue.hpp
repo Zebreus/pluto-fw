@@ -1,5 +1,5 @@
 #pragma once
-#include <queue>
+#include "queue.hpp"
 #include "Event.hpp"
 
-extern std::queue<Event> eventQueue;
+extern EventQueue eventQueue;

@@ -11,4 +11,4 @@ extern const app_t app_app_time;
 // extern const app_t app_app_otp;
 // extern const app_t app_app_speed;
 // extern const app_t app_app_cool;
-extern const app_t app_app_cpp;
+extern void coolfunction(uint8_t view, const app_t *app, svc_main_proc_event_t event);

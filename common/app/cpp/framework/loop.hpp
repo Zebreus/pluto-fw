@@ -7,9 +7,10 @@
 #include "common/app/cpp/framework/state.hpp"
 #include "common/app/cpp/framework/eventQueue.hpp"
 #include "common/app/cpp/framework/createComponent.hpp"
+#include "queue.hpp"
 
-void trigger(const Event& event);
+void trigger(const Event &event);
 
-void processEvent(const Event& event);
+void processEvent(const Event &event);
 
 void workQueue();

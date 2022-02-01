@@ -37,7 +37,7 @@ void svc_main_proc(svc_main_proc_event_t event) {
 		// 		app_view_changed = 0;
 		// 	}
 		// }
-		app_app_cpp.views[app_current->priv->view_current].main(app_current->priv->view_current, app_current, event);
+		coolfunction(app_current->priv->view_current, app_current, event);
 	}
 
 	// if(svc_rtc_adj_get_pending()) {

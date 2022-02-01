@@ -24,9 +24,13 @@ std::vector<ComponentData*> showAlarm(State* state, const std::vector<int>& para
     return {};
 }
 
+static unsigned int bbb;
+
 std::vector<ComponentData*> showTime(State* state, const std::vector<int>& params){
-unsigned long time = useGlobalState<4,unsigned long>(0);
-unsigned long unixTime = time;
+GlobalActionValue<unsigned long> time = useGlobalState<4,unsigned long>(0);
+unsigned long unixTime = time.get();
+// unsigned long time = useGlobalState<4,unsigned long>(0);
+// unsigned long unixTime = time;
 unsigned long seconds = unixTime/1000;
 unsigned long secondsA = seconds%10;
 unsigned long secondsB = (seconds/10)%6;
@@ -36,12 +40,17 @@ unsigned long  minutesB = (minutes/10)%6;
 unsigned long  hours = (minutes/60)%24;
 unsigned long  hoursA = hours%10;
 unsigned long  hoursB = hours/10;
+ unsigned int val = ((++bbb)%10);
 state->text[0] = 48 + hoursB;
 state->text[1] = 48 + hoursA;
 state->text[2] = 48 + minutesB;
 state->text[3] = 48 + minutesA;
 state->text[4] = 48 + secondsB;
 state->text[5] = 48 + secondsA;
+state->text[6] = 48 + val;
+state->text[7] = 48 + val;
+state->text[8] = 48 + val;
+state->text[9] = 48 + val;
 return {};
 }
 

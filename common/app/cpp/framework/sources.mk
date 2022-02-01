@@ -2,6 +2,7 @@
 SRC += ../common/app/cpp/framework/state.cpp
 SRC += ../common/app/cpp/framework/Event.cpp
 SRC += ../common/app/cpp/framework/eventQueue.cpp
+SRC += ../common/app/cpp/framework/queue.cpp
 SRC += ../common/app/cpp/framework/createComponent.cpp
 SRC += ../common/app/cpp/framework/demos/root.cpp
 

@@ -1,6 +1,6 @@
 #include "apps.h"
 
-const app_t *app_current = &app_app_cpp;
+const app_t *app_current = &app_app_time;
 uint8_t app_view_changed = 1;
 static const app_t *app_current_next = &app_app_time;
 
