@@ -1,1 +1,1 @@
-SRC += ../common/app/casio/entry.cpp
+# SRC += ../common/app/casio/entry.cpp

@@ -1,1 +1,1 @@
-SRC += ../common/app/play/app.c
+# SRC += ../common/app/play/app.c

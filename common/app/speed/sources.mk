@@ -1,1 +1,1 @@
-SRC += ../common/app/speed/app.c
+# SRC += ../common/app/speed/app.c

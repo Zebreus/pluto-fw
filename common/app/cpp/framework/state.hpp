@@ -1,15 +1,15 @@
 #pragma once
 #include <optional>
 
-extern "C" {
-#include "common/app/app.h"
-#include "common/app/apps.h"
+extern "C"
+{
 #include "common/svc/svc.h"
 #include "common/hal/hal.h"
 #include "common/hal/lcd_segments.h"
 }
 
-struct State {
+struct State
+{
     std::optional<bool> pm;
     std::optional<bool> twentyfour;
     std::optional<bool> alarm;
@@ -24,5 +24,5 @@ struct State {
 
     void realize();
     /** Layer the other state on top of this */
-    void layer(const State& other);
+    void layer(const State &other);
 };

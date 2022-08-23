@@ -1,7 +1,7 @@
-SRC += ../common/app/app.c
-include ../common/app/launcher/sources.mk
+# SRC += ../common/app/app.c
+# include ../common/app/launcher/sources.mk
 include ../common/app/cpp/sources.mk
-include ../common/app/time/sources.mk
+# include ../common/app/time/sources.mk
 # include ../common/app/casio/sources.mk
 # include ../common/app/conf/sources.mk
 # include ../common/app/play/sources.mk
