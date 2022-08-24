@@ -1,10 +1,44 @@
-#include "loop.hpp"
+module;
+
+#include <variant>
+#include <vector>
+
+export module fw.loop;
+import fw.event;
+import fw.useState;
+import fw.useGlobalState;
+import fw.root;
+import fw.state;
+import fw.eventQueue;
+import fw.createComponent;
+import fw.queue;
+
+extern "C"
+{
+#include "common/svc/svc.h"
+#include "common/hal/hal.h"
+#include "common/hal/lcd_segments.h"
+}
+
+// #include "common/app/cpp/framework/hooks/useState.hpp"
+// #include "common/app/cpp/framework/hooks/useGlobalState.hpp"
+// #include "common/app/cpp/framework/demos/root.hpp"
+// #include "common/app/cpp/framework/state.hpp"
+// #include "common/app/cpp/framework/eventQueue.hpp"
+// #include "common/app/cpp/framework/createComponent.hpp"
+// #include "queue.hpp"
+
+export void trigger(const Event &event);
+
+export void processEvent(const Event &event);
+
+export void workQueue();
 
 static ComponentData rootComponentV(&root, {});
 static ComponentData *rootComponent = &rootComponentV;
 
 /** Signal a trigger from an external event  */
-void trigger(const Event &event)
+export void trigger(const Event &event)
 {
     if (rootComponent == nullptr)
     {
@@ -17,7 +51,7 @@ void trigger(const Event &event)
 }
 
 /** Process this event and  */
-void processEvent(const Event &event)
+export void processEvent(const Event &event)
 {
     auto lastCurrent = current;
     current = nullptr;
@@ -80,7 +114,7 @@ State getState(const ComponentData *component)
     return state;
 }
 
-void workQueue()
+export void workQueue()
 {
     while (!eventQueue.isEmpty())
     {

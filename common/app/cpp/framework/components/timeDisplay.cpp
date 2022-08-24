@@ -1,7 +1,18 @@
-#include "timeDisplay.hpp"
+module;
 
-std::vector<ComponentData *> timeDisplay(State *state, const std::vector<int> &params)
+#include <vector>
+#include <concepts>
+
+export module fw.timeDisplay;
+
+import fw.createComponent;
+import fw.state;
+import fw.useState;
+import fw.useGlobalState;
+
+export std::vector<ComponentData *> timeDisplay(State *state, const std::vector<int> &params)
 {
+
     GlobalActionValue<unsigned long> time = useGlobalState<4, unsigned long>(0);
     unsigned long unixTime = time.get();
 
@@ -14,11 +25,11 @@ std::vector<ComponentData *> timeDisplay(State *state, const std::vector<int> &p
     unsigned long hours = (minutes / 60) % 24;
     unsigned long hoursA = hours % 10;
     unsigned long hoursB = hours / 10;
-    state->text[0] = hoursB ? (48 + hoursB) : ' ';
+    state->text[0] = 48 + hoursB;
     state->text[1] = 48 + hoursA;
     state->text[2] = 48 + minutesB;
     state->text[3] = 48 + minutesA;
     state->text[4] = 48 + secondsB;
     state->text[5] = 48 + secondsA;
     return {};
-}
+};

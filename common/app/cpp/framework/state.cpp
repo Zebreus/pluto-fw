@@ -1,38 +1,81 @@
-#include "state.hpp"
-#include <bitset>
 
-void State::realize(){
+
+module;
+#include <bitset>
+#include <optional>
+
+export module fw.state;
+
+extern "C"
+{
+#include "common/svc/svc.h"
+#include "common/hal/hal.h"
+#include "common/hal/lcd_segments.h"
+}
+
+export struct State
+{
+    std::optional<bool> pm;
+    std::optional<bool> twentyfour;
+    std::optional<bool> alarm;
+    std::optional<bool> bell;
+    std::optional<bool> lap;
+    std::optional<bool> colon;
+    std::optional<bool> dot;
+    std::optional<char> text[10];
+
+    std::optional<bool> backlight;
+    std::optional<bool> beeper;
+
+    void realize();
+    /** Layer the other state on top of this */
+    void layer(const State &other);
+};
+
+void State::realize()
+{
     hal_lcd_clear();
 
-    if(pm.has_value()){
+    if (pm.has_value())
+    {
         hal_lcd_seg_set(HAL_LCD_SEG_PM, pm.value() ? 1 : 0);
     }
-    if(twentyfour.has_value()){
+    if (twentyfour.has_value())
+    {
         hal_lcd_seg_set(HAL_LCD_SEG_24H, twentyfour.value() ? 1 : 0);
     }
-    if(alarm.has_value()){
+    if (alarm.has_value())
+    {
         hal_lcd_seg_set(HAL_LCD_SEG_BARS, alarm.value() ? 1 : 0);
     }
-    if(bell.has_value()){
+    if (bell.has_value())
+    {
         hal_lcd_seg_set(HAL_LCD_SEG_BELL, bell.value() ? 1 : 0);
     }
-    if(lap.has_value()){
+    if (lap.has_value())
+    {
         hal_lcd_seg_set(HAL_LCD_SEG_LAP, lap.value() ? 1 : 0);
     }
-    if(colon.has_value()){
+    if (colon.has_value())
+    {
         hal_lcd_seg_set(HAL_LCD_SEG_COLON, colon.value() ? 1 : 0);
     }
-    if(dot.has_value()){
+    if (dot.has_value())
+    {
         // noop
     }
-    if(backlight.has_value()){
+    if (backlight.has_value())
+    {
         hal_backlight_set(backlight.value() ? 10 : 0);
     }
-    if(beeper.has_value()){
+    if (beeper.has_value())
+    {
         hal_beep(beeper.value() ? 550 : 0);
     }
-    for(int i = 0 ; i<10;i++){
-        if(text[i].has_value()){
+    for (int i = 0; i < 10; i++)
+    {
+        if (text[i].has_value())
+        {
             svc_lcd_putc(i, text[i].value());
         }
     }
@@ -40,41 +83,53 @@ void State::realize(){
     // svc_lcd_puts(9, "u");
     // //svc_lcd_putc(8, '4');
     // // svc_lcd_puts(8, sv.data());
-    
+
     // svc_lcd_putc(8, text[0]);
     // svc_lcd_putsn(0, 10, text);
 }
 
-void State::layer(const State& other){
-    if(other.pm.has_value()){
+void State::layer(const State &other)
+{
+    if (other.pm.has_value())
+    {
         pm = other.pm;
     }
-    if(other.twentyfour.has_value()){
+    if (other.twentyfour.has_value())
+    {
         twentyfour = other.twentyfour;
     }
-    if(other.alarm.has_value()){
+    if (other.alarm.has_value())
+    {
         alarm = other.alarm;
     }
-    if(other.bell.has_value()){
+    if (other.bell.has_value())
+    {
         bell = other.bell;
     }
-    if(other.lap.has_value()){
+    if (other.lap.has_value())
+    {
         lap = other.lap;
     }
-    if(other.colon.has_value()){
+    if (other.colon.has_value())
+    {
         colon = other.colon;
     }
-    if(other.dot.has_value()){
+    if (other.dot.has_value())
+    {
         dot = other.dot;
     }
-    if(other.backlight.has_value()){
+    if (other.backlight.has_value())
+    {
         backlight = other.backlight;
     }
-    if(other.beeper.has_value()){
+    if (other.beeper.has_value())
+    {
         beeper = other.beeper;
     }
-    for(int i = 0 ; i<10;i++){
-        if(other.text[i].has_value()){
+    for (int i = 0; i < 10; i++)
+    {
+        if (other.text[i].has_value())
+        {
             text[i] = other.text[i];
         }
     }

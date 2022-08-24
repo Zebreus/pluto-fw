@@ -1,6 +1,7 @@
 #pragma once
 
 #ifdef __cplusplus
+
 #include <array>
 #include <string>
 #include <stdlib.h>
@@ -12,7 +13,7 @@ extern "C"
 #include "common/hal/hal.h"
 #include "common/hal/lcd_segments.h"
 
-    // void entrypoint(svc_main_proc_event_t event);
+    void entrypoint(svc_main_proc_event_t event);
 
 #ifdef __cplusplus
 }

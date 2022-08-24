@@ -1,3 +1,5 @@
-#include "eventQueue.hpp"
+export module fw.eventQueue;
 
-EventQueue eventQueue;
+import fw.queue;
+
+export EventQueue eventQueue;
