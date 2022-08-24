@@ -31,7 +31,7 @@ OBJ  = $(COBJ) $(SOBJ) $(CXXOBJ)
 OPTIMIZE=-O0 -fdata-sections -ffunction-sections
 DEBUG   = -g3
 CFLAGS  = $(DEBUG) $(OPTIMIZE) $(shell pkg-config --cflags libpulse) -MP -MMD -pthread -Wall -Wno-main
-CXXFLAGS = $(DEBUG) $(OPTIMIZE) $(shell pkg-config --cflags libpulse) -MP -MMD -pthread -Wall -Wno-main -std=c++20
+CXXFLAGS = $(DEBUG) $(OPTIMIZE) $(shell pkg-config --cflags libpulse) -MP -MMD -pthread -Wall -Wno-main -std=c++20 -fmodules-ts
 LDFLAGS = -lzmq -lm $(shell pkg-config --libs libpulse) -pthread -lmbedcrypto
 
 $(EXECUTABLE): $(OBJ)

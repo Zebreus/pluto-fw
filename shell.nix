@@ -1,8 +1,8 @@
 let
   pinnedPkgs = import (builtins.fetchTarball {
-    name = "nixos-21.05";
-    url = "https://github.com/nixos/nixpkgs/archive/46251a79f752ae1d46ef733e8e9760b6d3429da4.tar.gz";
-    sha256 = "1xsp0xyrf8arjkf4wi09n96kbg0r8igsmzx8bhc1nj4nr078p0pg";
+    name = "nixos-22.05";
+    url = "https://github.com/nixos/nixpkgs/archive/ce6aa13369b667ac2542593170993504932eb836.tar.gz";
+    sha256 = "0d643wp3l77hv2pmg2fi7vyxn4rwy0iyr8djcw1h5x72315ck9ik";
   });
   
   pkgs = pinnedPkgs {};
@@ -13,6 +13,7 @@ let
       libc = "newlib";
       gcc.float = " --enable-multilib --disable-libquadmath ";
     };
+    overlays = [ (self: super: { gcc = self.gcc12; }) ];
   };
 
   python = pkgs.python39.withPackages(ps: with ps; [
@@ -30,7 +31,7 @@ let
   vscode = pkgs.vscode-with-extensions.override {
     vscode = pkgs.vscode;
     vscodeExtensions = [
-      pkgs.vscode-extensions.bbenoist.Nix
+      pkgs.vscode-extensions.bbenoist.nix
       pkgs.vscode-extensions.ms-vscode.cpptools
     ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [{
       name = "msp430-assembly";
@@ -58,5 +59,5 @@ pkgs.mkShell {
   shellHook = ''
     export LD_LIBRARY_PATH="${pkgs.mspds}/lib";
   '';
-  nativeBuildInputs = with pkgs; [ crossPkgs.buildPackages.gcc crossPkgs.buildPackages.gdb mspds mspdebug zeromq python gnumake mbedtls pulseaudio pkgconfig gobjectIntrospection gtk3 lsof gdb vscode];
+  nativeBuildInputs = with pkgs; [ crossPkgs.buildPackages.gcc crossPkgs.buildPackages.gdb mspds mspdebug zeromq python gnumake mbedtls pulseaudio pkgconfig gobject-introspection gtk3 lsof gdb vscode];
 }

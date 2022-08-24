@@ -4,10 +4,11 @@ TARGET = main
 MCU = msp430fr6972
 INC = -I.
 OUTDIR = output/target
+CACHEDIR = gcm.cache
 DEFINES =
 DEBUG = -Og -g2 -ggdb -gdwarf-2
 CFLAGS = $(DEBUG) -fno-exceptions -fno-unwind-tables $(DEFINES) -mmcu=$(MCU) -Wunused -MMD -MP -MMD -Wall -Wextra -Wno-main
-CXXFLAGS = $(DEBUG) -fno-exceptions -fno-unwind-tables -fno-use-cxa-atexit $(DEFINES) -mmcu=$(MCU) -MMD -MP -MMD -Wall -Wextra -Wno-main -std=c++20
+CXXFLAGS = $(DEBUG) -fno-exceptions -fno-unwind-tables -fno-use-cxa-atexit $(DEFINES) -mmcu=$(MCU) -MMD -MP -MMD -Wall -Wextra -Wno-main -std=c++20 -fmodules-ts 
 # ASFLAGS = -mmcu=$(MCU) -x assembler-with-cpp -Wa,-gstabs
 LDFLAGS = $(DEBUG) -fno-exceptions -fno-unwind-tables -fno-use-cxa-atexit -mmcu=$(MCU) -T msp430fr6972.ld -Wl,-Map=$(OUTDIR)/$(TARGET).map,--gc-sections
 #/nix/store/2n0civyah576zdl52yprs0nzb3d1cm2p-msp430-elf-stage-final-gcc-debug-10.3.0/msp430-elf/lib/libstdc++.a
@@ -72,6 +73,7 @@ $(COBJECTS): $(OUTDIR)/%.o: %.c
 $(CPPOBJECTS): $(OUTDIR)/%.o: %.cpp
 	mkdir -p $(shell dirname $@)
 	$(CXX) -c $(CXXFLAGS) $(INC) -o $@ $<
+#-x c++-system-header bitset optional map memory vector variant
 
 -include  $(OBJECTS:.o=.d)
 
