@@ -13,3 +13,4 @@ SRC += ../common/app/cpp/framework/demos/root.cpp
 SRC += ../common/app/cpp/framework/loop.cpp
 # SRC += ../common/app/cpp/framework/demos/demoB.cpp
 SRC += ../common/app/cpp/framework/components/timeDisplay.cpp
+SRC += ../common/app/cpp/framework/components/buttonTester.cpp
