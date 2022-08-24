@@ -7,10 +7,11 @@ export module fw.root;
 
 import fw.createComponent;
 import fw.timeDisplay;
+import fw.buttonTester;
 import fw.state;
 
 export std::vector<ComponentData *> root(State *state, const std::vector<int> &params)
 {
-    auto demoComponent = new ComponentData(timeDisplay, {});
+    auto demoComponent = new ComponentData(buttonTester, {});
     return {demoComponent};
 }

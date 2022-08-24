@@ -1,4 +1,5 @@
-extern "C" {
+extern "C"
+{
 #include <msp430.h>
 #include "hal/wdt.h"
 #include "hal/io.h"
@@ -15,33 +16,39 @@ extern "C" {
 #include "common/svc/otp/oath.h"
 }
 
-extern "C" void clk_init(void) {
+extern "C" void clk_init(void)
+{
 	CSCTL0 = CSKEY; /* password */
 
 	PCONF(J, 4, (FUNC1 | IN)); /* LFXT pin */
 	PCONF(J, 5, (FUNC1 | IN)); /* LFXT pin */
 
-	//XTS = 0; // turn xt1 in lf mode (default)
-	
-	CSCTL4 |= HFXTOFF; /* turn off HFXT */
-	CSCTL1 = DCORSEL | DCOFSEL_4; /* DCO: 16 Mhz */
-	CSCTL3 = DIVA__1 | DIVS__4 | DIVM__2; //SMCLK = 16MHz/4=4MHz, MCLK=16MHz/2=8MHz
-	while(SFRIFG1&OFIFG) {
-		CSCTL5 &= ~(HFXTOFFG|LFXTOFF);
+	// XTS = 0; // turn xt1 in lf mode (default)
+
+	CSCTL4 |= HFXTOFF;					  /* turn off HFXT */
+	CSCTL1 = DCORSEL | DCOFSEL_4;		  /* DCO: 16 Mhz */
+	CSCTL3 = DIVA__1 | DIVS__4 | DIVM__2; // SMCLK = 16MHz/4=4MHz, MCLK=16MHz/2=8MHz
+	while (SFRIFG1 & OFIFG)
+	{
+		CSCTL5 &= ~(HFXTOFFG | LFXTOFF);
 		SFRIFG1 &= ~OFIFG;
 	}
 
 	CSCTL0_H = 0; /* lock access */
 }
 
-inline svc_main_proc_event_t operator|=(svc_main_proc_event_t& a, const svc_main_proc_event_t& b)
+inline svc_main_proc_event_t operator|=(svc_main_proc_event_t &a, const svc_main_proc_event_t &b)
 {
-    a = static_cast<svc_main_proc_event_t>(static_cast<unsigned char>(a) | static_cast<int>(b));
+	a = static_cast<svc_main_proc_event_t>(static_cast<unsigned char>(a) | static_cast<int>(b));
 	return a;
 }
 
 // Link to userguide
 // https://www.ti.com/lit/ug/slau367p/slau367p.pdf
+
+bool prevLight = false;
+bool prevMode = false;
+bool prevAlarm = false;
 
 extern "C" int main(void)
 {
@@ -56,14 +63,16 @@ extern "C" int main(void)
 
 #pragma optimize("", off)
 	volatile uint16_t reset_reason = hal_debug_read(0);
-	if(reset_reason) {
+	if (reset_reason)
+	{
 		beep_init(0);
 	}
-	else {
+	else
+	{
 		beep_init(1);
 	}
 
-	//hal_compass_init();
+	// hal_compass_init();
 	svc_init();
 
 	__nop();
@@ -81,8 +90,10 @@ extern "C" int main(void)
 	// }
 
 	int counter = 0;
-	#pragma optimize("", on)
-	while(1) {
+#pragma optimize("", on)
+
+	while (1)
+	{
 
 		svc_main_proc_event_t ev = SVC_MAIN_PROC_NO_EVENT;
 
@@ -95,46 +106,64 @@ extern "C" int main(void)
 		// 	int v = 1;
 		// 	int t = v+1;
 		// }
-		if(get_button_short(BTN_LIGHT)) {
+		bool light = get_button_light();
+		bool mode = get_button_mode();
+		bool alarm = get_button_alarm();
+		if (light && !prevLight)
+		{
 			ev |= SVC_MAIN_PROC_EVENT_KEY_UP;
 		}
-		if(get_button_short(BTN_MODE)) {
-			ev |= SVC_MAIN_PROC_EVENT_KEY_DOWN;
-		}
-		if(get_button_short(BTN_ALARM)) {
-			ev |= SVC_MAIN_PROC_EVENT_KEY_ENTER;
-		}
-		if(get_button_long(BTN_LIGHT)) {
+		if (!light && prevLight)
+		{
 			ev |= SVC_MAIN_PROC_EVENT_KEY_UP_LONG;
 		}
-		if(get_button_long(BTN_MODE)) {
+		if (mode && !prevMode)
+		{
+			ev |= SVC_MAIN_PROC_EVENT_KEY_DOWN;
+		}
+		if (!mode && prevMode)
+		{
 			ev |= SVC_MAIN_PROC_EVENT_KEY_DOWN_LONG;
 		}
-		if(get_button_long(BTN_ALARM)) {
+		if (alarm && !prevAlarm)
+		{
+			ev |= SVC_MAIN_PROC_EVENT_KEY_ENTER;
+		}
+		if (!alarm && prevAlarm)
+		{
 			ev |= SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG;
 		}
-		if(tick_event) {
+		prevAlarm = alarm;
+		prevLight = light;
+		prevMode = mode;
+
+		if (tick_event)
+		{
 			ev |= SVC_MAIN_PROC_EVENT_TICK;
 		}
-		if(aux_timer_event) {
+		if (aux_timer_event)
+		{
 			ev |= SVC_MAIN_PROC_EVENT_AUX_TIMER;
 		}
 		volatile auto hnetaathn = 55;
-		if(ev) {
+		if (ev)
+		{
 			P9OUT |= BIT5;
 			wdt_clear();
 			svc_main_proc(ev);
 			hal_lcd_update();
 			P9OUT &= ~BIT5;
 		}
-		if(ev & SVC_MAIN_PROC_EVENT_TICK) {
+		if (ev & SVC_MAIN_PROC_EVENT_TICK)
+		{
 			tick_event = 0;
 		}
-		if(ev & SVC_MAIN_PROC_EVENT_AUX_TIMER) {
+		if (ev & SVC_MAIN_PROC_EVENT_AUX_TIMER)
+		{
 			aux_timer_event = 0;
 		}
 
-	    // Chapter 1.4.2
+		// Chapter 1.4.2
 		// LPM3 exit on timer a
 		LPM3;
 	}

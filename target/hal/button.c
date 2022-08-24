@@ -1,17 +1,19 @@
 #include <msp430.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "button.h"
 #include "io.h"
 
-#define REPEAT_MASK     BTN_ALL
-#define REPEAT_START    50   /* 500 ms */
-#define REPEAT_NEXT     20   /* 200 ms */
+#define COUNTER_MAX 20
+#define COUNTER_TRIGGER_HIGH 12
+#define COUNTER_TRIGGER_LOW 8
 
-#define DEB_RUNTIME     500 /* 5s */
+#define DEB_RUNTIME 500 /* 5s */
 
-volatile uint8_t button_state;
-volatile uint8_t button_press;
-volatile uint8_t button_rpt;
+volatile bool alarmDown;
+volatile bool lightDown;
+volatile bool modeDown;
+
 volatile uint16_t debrun = 0;
 
 void button_init(void)
@@ -27,84 +29,107 @@ void button_init(void)
 	TA3CCR0 = 2048; /* results in 16Hz */
 }
 
-void __attribute__((interrupt ((TIMER3_A1_VECTOR)))) TimerA3_1_ISR(void)
+void __attribute__((interrupt((TIMER3_A1_VECTOR)))) TimerA3_1_ISR(void)
 {
 	TA3CTL &= ~TAIFG;
-	if(PGET(9,4) | PGET(J,2) | PGET(J,0)) {
+	if (PGET(9, 4) | PGET(J, 2) | PGET(J, 0))
+	{
 		TA1CTL |= MC__UP;
 		debrun = 0;
 	}
 }
 
-/* credit for awesome debouncing routine: Peter Dannegger **********************/
-void __attribute__((interrupt ((TIMER1_A1_VECTOR)))) TimerA1_1_ISR(void)
+void __attribute__((interrupt((TIMER1_A1_VECTOR)))) TimerA1_1_ISR(void)
 {
-	static uint8_t ct0 = 0xFF, ct1 = 0xFF, rpt;
-	uint8_t i;
+	static uint8_t counterLight, counterAlarm, counterMode;
 	TA1CTL &= ~TAIFG;
 
-	i = button_state ^ ((PGET(9,4)<<2) | (PGET(J,2)<<1) | PGET(J,0));
-	ct0 = ~(ct0 & i);
-	ct1 = ct0 ^ (ct1 & i);
-	i &= ct0 & ct1;
-	button_state ^= i;
-	button_press |= button_state & i;
+	volatile value = PGET(9, 4);
+	volatile value2 = PGET(9, 3);
+	volatile value3 = PGET(9, 5);
+	volatile value4 = P9IN;
+	bool alarmPressed = PGET(9, 4) != 0;
+	bool lightPressed = PGET(J, 0) != 0;
+	bool modePressed = PGET(J, 2) != 0;
 
-	if((button_state & REPEAT_MASK) == 0)
-		rpt = REPEAT_START;
-	if(--rpt == 0){
-		rpt = REPEAT_NEXT;
-		button_rpt |= button_state & REPEAT_MASK;
+	counterAlarm += alarmPressed
+						? counterAlarm < COUNTER_MAX ? 1 : 0
+					: counterAlarm > 0 ? -1
+									   : 0;
+	counterLight += lightPressed
+						? counterLight < COUNTER_MAX ? 1 : 0
+					: counterLight > 0 ? -1
+									   : 0;
+	counterMode += modePressed
+					   ? counterMode < COUNTER_MAX ? 1 : 0
+				   : counterMode > 0 ? -1
+									 : 0;
+
+	if (!alarmDown && counterAlarm >= COUNTER_TRIGGER_HIGH)
+	{
+		alarmDown = true;
+	}
+	if (alarmDown && counterAlarm <= COUNTER_TRIGGER_LOW)
+	{
+		alarmDown = false;
 	}
 
-	if(debrun < DEB_RUNTIME)
+	if (!lightDown && counterLight >= COUNTER_TRIGGER_HIGH)
+	{
+		lightDown = true;
+	}
+	if (lightDown && counterLight <= COUNTER_TRIGGER_LOW)
+	{
+		lightDown = false;
+	}
+
+	if (!modeDown && counterMode >= COUNTER_TRIGGER_HIGH)
+	{
+		modeDown = true;
+	}
+	if (modeDown && counterMode <= COUNTER_TRIGGER_LOW)
+	{
+		modeDown = false;
+	}
+
+	if (debrun < DEB_RUNTIME)
 		debrun += 1;
-	else {
+	else
+	{
 		TA1CTL &= ~MC_3;
 	}
 	LPM3_EXIT;
 }
 
-uint8_t get_button_press(uint8_t button_mask)
+bool get_button_alarm()
 {
+	bool value;
 	__dint();
 	__no_operation();
-	button_mask &= button_press;
-	button_press ^= button_mask;
+	value = alarmDown;
 	__nop();
 	__eint();
-	return button_mask;
+	return value;
 }
 
-uint8_t get_button_rpt(uint8_t button_mask)
+bool get_button_light()
 {
+	bool value;
 	__dint();
 	__no_operation();
-	button_mask &= button_rpt;
-	button_rpt ^= button_mask;
+	value = lightDown;
 	__nop();
 	__eint();
-	return button_mask;
+	return value;
 }
 
-uint8_t get_button_state(uint8_t button_mask)
+bool get_button_mode()
 {
-	button_mask &= button_state;
-	return button_mask;
+	bool value;
+	__dint();
+	__no_operation();
+	value = modeDown;
+	__nop();
+	__eint();
+	return value;
 }
-
-uint8_t get_button_short(uint8_t button_mask)
-{
-	return get_button_press(~button_state & button_mask);
-}
-
-uint8_t get_button_long(uint8_t button_mask)
-{
-	return get_button_press(get_button_rpt(button_mask));
-}
-
-uint8_t get_button_common(uint8_t button_mask)
-{
-	return get_button_press((button_press & button_mask) == button_mask ? button_mask : 0);
-}
-
