@@ -23,8 +23,6 @@ extern "C" void clk_init(void)
 	PCONF(J, 4, (FUNC1 | IN)); /* LFXT pin */
 	PCONF(J, 5, (FUNC1 | IN)); /* LFXT pin */
 
-	// XTS = 0; // turn xt1 in lf mode (default)
-
 	CSCTL4 |= HFXTOFF;					  /* turn off HFXT */
 	CSCTL1 = DCORSEL | DCOFSEL_4;		  /* DCO: 16 Mhz */
 	CSCTL3 = DIVA__1 | DIVS__4 | DIVM__2; // SMCLK = 16MHz/4=4MHz, MCLK=16MHz/2=8MHz
@@ -49,6 +47,39 @@ inline svc_main_proc_event_t operator|=(svc_main_proc_event_t &a, const svc_main
 bool prevLight = false;
 bool prevMode = false;
 bool prevAlarm = false;
+
+extern "C" void alarmCallback(const bool state)
+{
+	P9OUT |= BIT5;
+	wdt_clear();
+	svc_main_proc_event_t ev = SVC_MAIN_PROC_NO_EVENT;
+	ev |= (state ? SVC_MAIN_PROC_EVENT_KEY_ENTER : SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG);
+	svc_main_proc(ev);
+	hal_lcd_update();
+	P9OUT &= ~BIT5;
+};
+
+extern "C" void lightCallback(const bool state)
+{
+	P9OUT |= BIT5;
+	wdt_clear();
+	svc_main_proc_event_t ev = SVC_MAIN_PROC_NO_EVENT;
+	ev |= (state ? SVC_MAIN_PROC_EVENT_KEY_UP : SVC_MAIN_PROC_EVENT_KEY_UP_LONG);
+	svc_main_proc(ev);
+	hal_lcd_update();
+	P9OUT &= ~BIT5;
+};
+
+extern "C" void modeCallback(const bool state)
+{
+	P9OUT |= BIT5;
+	wdt_clear();
+	svc_main_proc_event_t ev = SVC_MAIN_PROC_NO_EVENT;
+	ev |= (state ? SVC_MAIN_PROC_EVENT_KEY_DOWN : SVC_MAIN_PROC_EVENT_KEY_DOWN_LONG);
+	svc_main_proc(ev);
+	hal_lcd_update();
+	P9OUT &= ~BIT5;
+};
 
 extern "C" int main(void)
 {
@@ -94,48 +125,7 @@ extern "C" int main(void)
 
 	while (1)
 	{
-
 		svc_main_proc_event_t ev = SVC_MAIN_PROC_NO_EVENT;
-
-		// counter = ++counter % 60;
-		// unsigned char value = counter / 1;
-		// svc_lcd_puts(8, "RE");
-		// svc_lcd_putix(4, 2, value&0xFF);
-		// hal_lcd_update();
-		// while(1) {
-		// 	int v = 1;
-		// 	int t = v+1;
-		// }
-		bool light = get_button_light();
-		bool mode = get_button_mode();
-		bool alarm = get_button_alarm();
-		if (light && !prevLight)
-		{
-			ev |= SVC_MAIN_PROC_EVENT_KEY_UP;
-		}
-		if (!light && prevLight)
-		{
-			ev |= SVC_MAIN_PROC_EVENT_KEY_UP_LONG;
-		}
-		if (mode && !prevMode)
-		{
-			ev |= SVC_MAIN_PROC_EVENT_KEY_DOWN;
-		}
-		if (!mode && prevMode)
-		{
-			ev |= SVC_MAIN_PROC_EVENT_KEY_DOWN_LONG;
-		}
-		if (alarm && !prevAlarm)
-		{
-			ev |= SVC_MAIN_PROC_EVENT_KEY_ENTER;
-		}
-		if (!alarm && prevAlarm)
-		{
-			ev |= SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG;
-		}
-		prevAlarm = alarm;
-		prevLight = light;
-		prevMode = mode;
 
 		if (tick_event)
 		{

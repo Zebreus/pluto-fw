@@ -68,28 +68,34 @@ void __attribute__((interrupt((TIMER1_A1_VECTOR)))) TimerA1_1_ISR(void)
 	if (!alarmDown && counterAlarm >= COUNTER_TRIGGER_HIGH)
 	{
 		alarmDown = true;
+		alarmCallback(true);
 	}
 	if (alarmDown && counterAlarm <= COUNTER_TRIGGER_LOW)
 	{
 		alarmDown = false;
+		alarmCallback(false);
 	}
 
 	if (!lightDown && counterLight >= COUNTER_TRIGGER_HIGH)
 	{
 		lightDown = true;
+		lightCallback(true);
 	}
 	if (lightDown && counterLight <= COUNTER_TRIGGER_LOW)
 	{
 		lightDown = false;
+		lightCallback(false);
 	}
 
 	if (!modeDown && counterMode >= COUNTER_TRIGGER_HIGH)
 	{
 		modeDown = true;
+		modeCallback(true);
 	}
 	if (modeDown && counterMode <= COUNTER_TRIGGER_LOW)
 	{
 		modeDown = false;
+		modeCallback(false);
 	}
 
 	if (debrun < DEB_RUNTIME)
