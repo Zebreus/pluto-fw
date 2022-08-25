@@ -62,7 +62,26 @@
         "order": 2,
         "group": "msp430"
       }
-    }
+    },
+    {
+      "name": "Debug beyond",
+      "type": "by-gdb",
+      "request": "launch",
+      "program": "${workspaceRoot}/target/output/target/main.elf",
+      "cwd": "${workspaceRoot}",
+      "debuggerPath": "msp430-elf-gdb",
+      "preLaunchTask": "gdbserver",
+      "remote": {
+        "enabled": true,
+        "address": ":2000",
+        "mode": "remote",
+        "execfile": "${workspaceRoot}/target/output/target/main.elf"
+      },
+      "presentation": {
+        "order": 3,
+        "group": "msp430"
+      }
+    },
   ],
   "compounds": [
     {

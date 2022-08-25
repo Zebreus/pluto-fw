@@ -145,6 +145,16 @@
       "command": "make program",
       "dependsOn": "compile",
       "problemMatcher": []
-    }
+    },
+    {
+      "label": "gdbserver",
+      "options": {
+        "cwd": "${workspaceRoot}/target"
+      },
+      "type": "shell",
+      "detail": "Start the debug server",
+      "isBackground": true,
+      "command": "mspdebug tilib \"opt color true\" \"sym import+ ${workspaceRoot}/target/output/target/main.elf\" \"reset\" \"gdb\"",
+    },
   ]
 }
