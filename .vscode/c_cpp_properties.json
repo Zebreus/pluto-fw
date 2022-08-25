@@ -5,14 +5,20 @@
             "includePath": [
                 "${workspaceFolder}",
                 "${workspaceFolder}/target",
-                "${workspaceFolder}/common/svc/otp/mbedtls/include"
+                "${workspaceFolder}/common/svc/otp/mbedtls/include",
+                "${workspaceFolder}/common",
+                "${workspaceFolder}/common/app",
+                "${workspaceFolder}/common/app/cpp",
+                "${workspaceFolder}/common/app/cpp/framework",
+                "/nix/store/sw5xd8c9jiaby950q93nl20sybz5bbar-msp430-gcc-support-files-1.207/include"
             ],
             "defines": [
-                "MBEDTLS_CONFIG_FILE=\\\"../common/svc/otp/mbedtls/mbedtls_config.h\\\""
+                "MBEDTLS_CONFIG_FILE=\\\"../common/svc/otp/mbedtls/mbedtls_config.h\\\"",
+                "__MSP430FR6972__"
             ],
             "cStandard": "c11",
             "cppStandard": "c++20",
-            "intelliSenseMode": "gcc-x64",
+            "intelliSenseMode": "gcc-x64"
         }
     ],
     "version": 4
