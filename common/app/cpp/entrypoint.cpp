@@ -10,32 +10,34 @@ extern "C"
 
         if (event & SVC_MAIN_PROC_EVENT_TICK)
         {
-            trigger(TickEvent());
+            queueEvent(TickEvent());
         }
 
         if (event & SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG)
         {
-            trigger(AlarmUpEvent());
+            queueEvent(AlarmUpEvent());
         }
         if (event & SVC_MAIN_PROC_EVENT_KEY_ENTER)
         {
-            trigger(AlarmDownEvent());
+            queueEvent(AlarmDownEvent());
         }
         if (event & SVC_MAIN_PROC_EVENT_KEY_UP_LONG)
         {
-            trigger(LightUpEvent());
+            queueEvent(LightUpEvent());
         }
         if (event & SVC_MAIN_PROC_EVENT_KEY_UP)
         {
-            trigger(LightDownEvent());
+            queueEvent(LightDownEvent());
         }
         if (event & SVC_MAIN_PROC_EVENT_KEY_DOWN_LONG)
         {
-            trigger(ModeUpEvent());
+            queueEvent(ModeUpEvent());
         }
         if (event & SVC_MAIN_PROC_EVENT_KEY_DOWN)
         {
-            trigger(ModeDownEvent());
+            queueEvent(ModeDownEvent());
         }
+
+        workQueue();
     }
 }

@@ -28,8 +28,6 @@ extern "C"
 // #include "common/app/cpp/framework/createComponent.hpp"
 // #include "queue.hpp"
 
-export void trigger(const Event &event);
-
 export void processEvent(const Event &event);
 
 export void workQueue();
@@ -37,17 +35,19 @@ export void workQueue();
 static ComponentData rootComponentV(&root, {});
 static ComponentData *rootComponent = &rootComponentV;
 
-/** Signal a trigger from an external event  */
-export void trigger(const Event &event)
+export void frameworkInit()
 {
     if (rootComponent == nullptr)
     {
         rootComponent = new ComponentData(&root, {});
         current = rootComponent;
     }
+}
 
+/** Signal a trigger from an external event  */
+export void queueEvent(const Event &event)
+{
     eventQueue.push(event);
-    workQueue();
 }
 
 /** Process this event and  */
@@ -61,7 +61,7 @@ export void processEvent(const Event &event)
     auto time = useGlobalState<4, unsigned long>(0);
     current = lastCurrent;
 
-    if (auto alarmDown = std::get_if<TickEvent>(&event))
+    if (std::get_if<TickEvent>(&event))
     {
         hal_rtc_timedate_t td;
         hal_rtc_get(&td);
@@ -69,8 +69,7 @@ export void processEvent(const Event &event)
         unsigned long minutes = td.m;
         unsigned long hours = td.h;
         unsigned long newTime = (seconds + (minutes * 60ul) + (hours * 60ul * 60ul)) * 1000ul;
-        unsigned long nt2 = newTime;
-        time.set(nt2);
+        time.set(newTime);
     }
     if (auto alarmDown = std::get_if<AlarmDownEvent>(&event))
     {

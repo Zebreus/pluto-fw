@@ -16,9 +16,12 @@ extern "C"
 #include "common/svc/otp/oath.h"
 }
 
+import fw.event;
+import fw.loop;
+
 extern "C" void clk_init(void)
 {
-	CSCTL0 = CSKEY; /* password */
+	CSCTL0 = CSKEY; // Enable writing to CS registers
 
 	PCONF(J, 4, (FUNC1 | IN)); /* LFXT pin */
 	PCONF(J, 5, (FUNC1 | IN)); /* LFXT pin */
@@ -32,53 +35,30 @@ extern "C" void clk_init(void)
 		SFRIFG1 &= ~OFIFG;
 	}
 
-	CSCTL0_H = 0; /* lock access */
-}
-
-inline svc_main_proc_event_t operator|=(svc_main_proc_event_t &a, const svc_main_proc_event_t &b)
-{
-	a = static_cast<svc_main_proc_event_t>(static_cast<unsigned char>(a) | static_cast<int>(b));
-	return a;
+	CSCTL0_H = 0; // Disable writing to CS registers
 }
 
 // Link to userguide
 // https://www.ti.com/lit/ug/slau367p/slau367p.pdf
 
-bool prevLight = false;
-bool prevMode = false;
-bool prevAlarm = false;
-
 extern "C" void alarmCallback(const bool state)
 {
-	P9OUT |= BIT5;
-	wdt_clear();
-	svc_main_proc_event_t ev = SVC_MAIN_PROC_NO_EVENT;
-	ev |= (state ? SVC_MAIN_PROC_EVENT_KEY_ENTER : SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG);
-	svc_main_proc(ev);
-	hal_lcd_update();
-	P9OUT &= ~BIT5;
+	queueEvent(state ? (const Event &)AlarmDownEvent() : (const Event &)AlarmUpEvent());
 };
 
 extern "C" void lightCallback(const bool state)
 {
-	P9OUT |= BIT5;
-	wdt_clear();
-	svc_main_proc_event_t ev = SVC_MAIN_PROC_NO_EVENT;
-	ev |= (state ? SVC_MAIN_PROC_EVENT_KEY_UP : SVC_MAIN_PROC_EVENT_KEY_UP_LONG);
-	svc_main_proc(ev);
-	hal_lcd_update();
-	P9OUT &= ~BIT5;
+	queueEvent(state ? (const Event &)LightDownEvent() : (const Event &)LightUpEvent());
 };
 
 extern "C" void modeCallback(const bool state)
 {
-	P9OUT |= BIT5;
-	wdt_clear();
-	svc_main_proc_event_t ev = SVC_MAIN_PROC_NO_EVENT;
-	ev |= (state ? SVC_MAIN_PROC_EVENT_KEY_DOWN : SVC_MAIN_PROC_EVENT_KEY_DOWN_LONG);
-	svc_main_proc(ev);
-	hal_lcd_update();
-	P9OUT &= ~BIT5;
+	queueEvent(state ? (const Event &)ModeDownEvent() : (const Event &)ModeUpEvent());
+};
+
+extern "C" void tickCallback()
+{
+	queueEvent(TickEvent());
 };
 
 extern "C" int main(void)
@@ -91,71 +71,22 @@ extern "C" int main(void)
 	lcd_init();
 	button_init();
 	aux_timer_init();
+	frameworkInit();
 
-#pragma optimize("", off)
-	volatile uint16_t reset_reason = hal_debug_read(0);
-	if (reset_reason)
-	{
-		beep_init(0);
-	}
-	else
-	{
-		beep_init(1);
-	}
+	// volatile uint16_t reset_reason = hal_debug_read(0);
 
-	// hal_compass_init();
 	svc_init();
 
-	__nop();
-	__eint();
+	__eint(); // Enable interrupts
 
-	/* print reset reason on screen if there is some */
-	// if(reset_reason) {
-	// 	svc_lcd_puts(8, "RE");
-	// 	svc_lcd_putix(4, 2, reset_reason&0xFF);
-	// 	hal_lcd_update();
-	// 	while(!(get_button_short(BTN_ALARM))) {
-	// 		wdt_clear();
-	// 		LPM3;
-	// 	}
-	// }
-
-	int counter = 0;
-#pragma optimize("", on)
-
-	while (1)
+	while (true)
 	{
-		svc_main_proc_event_t ev = SVC_MAIN_PROC_NO_EVENT;
-
-		if (tick_event)
-		{
-			ev |= SVC_MAIN_PROC_EVENT_TICK;
-		}
-		if (aux_timer_event)
-		{
-			ev |= SVC_MAIN_PROC_EVENT_AUX_TIMER;
-		}
-		volatile auto hnetaathn = 55;
-		if (ev)
-		{
-			P9OUT |= BIT5;
-			wdt_clear();
-			svc_main_proc(ev);
-			hal_lcd_update();
-			P9OUT &= ~BIT5;
-		}
-		if (ev & SVC_MAIN_PROC_EVENT_TICK)
-		{
-			tick_event = 0;
-		}
-		if (ev & SVC_MAIN_PROC_EVENT_AUX_TIMER)
-		{
-			aux_timer_event = 0;
-		}
-
-		// Chapter 1.4.2
-		// LPM3 exit on timer a
 		LPM3;
+
+		// P9OUT |= BIT5;
+		hal_lcd_set_mode(HAL_LCD_MODE_BUFFERED);
+		workQueue();
+		hal_lcd_update();
+		// P9OUT &= ~BIT5;
 	}
-	return 0;
 }

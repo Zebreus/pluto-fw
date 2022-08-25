@@ -8,7 +8,7 @@ export module fw.buttonTester;
 import fw.createComponent;
 import fw.state;
 import fw.useState;
-import fw.useGlobalState;
+import fw.useButton;
 
 int buttonCounter = 0;
 bool prevAlarmPressed = false;
@@ -17,13 +17,9 @@ bool prevLightPressed = false;
 
 export std::vector<ComponentData *> buttonTester(State *state, const std::vector<int> &params)
 {
-
-    auto alarm = useGlobalState<1, bool>(false);
-    auto mode = useGlobalState<2, bool>(false);
-    auto light = useGlobalState<3, bool>(false);
-    bool alarmPressed = alarm.get();
-    bool modePressed = mode.get();
-    bool lightPressed = light.get();
+    bool alarmPressed = useButton<Button::ALARM>();
+    bool modePressed = useButton<Button::MODE>();
+    bool lightPressed = useButton<Button::LIGHT>();
 
     if (prevAlarmPressed == false && alarmPressed == true)
     {

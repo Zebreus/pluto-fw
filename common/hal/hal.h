@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define HAL_LCD_SEG(dig, seg) ((uint8_t)((((dig)&0xf)<<4)|((seg))))
+#define HAL_LCD_SEG(dig, seg) ((uint8_t)((((dig)&0xf) << 4) | ((seg))))
 
 void hal_lcd_seg_set(uint8_t seg, bool state);
 void hal_lcd_seg_set_blink(uint8_t seg, bool state);
@@ -12,7 +12,8 @@ void hal_lcd_dig_set_blink_mask(uint16_t mask);
 void hal_lcd_clear(void);
 void hal_lcd_update(void);
 
-typedef enum {
+typedef enum
+{
 	HAL_LCD_MODE_IMMEDIATE,
 	HAL_LCD_MODE_BUFFERED
 } hal_lcd_mode_t;
@@ -26,11 +27,12 @@ void hal_beep(uint16_t freq);
 uint8_t hal_beep_get_enabled();
 void hal_beep_set_enabled(uint8_t enabled);
 
-typedef struct {
+typedef struct
+{
 	uint8_t h;
 	uint8_t m;
 	uint8_t s;
-	
+
 	uint8_t dow;
 	uint8_t dom;
 	uint8_t month;
@@ -44,7 +46,8 @@ void hal_rtc_cal_set(int16_t cal);
 int16_t hal_rtc_cal_get(void);
 void hal_aux_timer_set(uint8_t running);
 
-typedef struct {
+typedef struct
+{
 	int16_t x;
 	int16_t y;
 	int16_t z;

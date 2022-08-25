@@ -69,33 +69,39 @@ void __attribute__((interrupt((TIMER1_A1_VECTOR)))) TimerA1_1_ISR(void)
 	{
 		alarmDown = true;
 		alarmCallback(true);
+		LPM3_EXIT;
 	}
 	if (alarmDown && counterAlarm <= COUNTER_TRIGGER_LOW)
 	{
 		alarmDown = false;
 		alarmCallback(false);
+		LPM3_EXIT;
 	}
 
 	if (!lightDown && counterLight >= COUNTER_TRIGGER_HIGH)
 	{
 		lightDown = true;
 		lightCallback(true);
+		LPM3_EXIT;
 	}
 	if (lightDown && counterLight <= COUNTER_TRIGGER_LOW)
 	{
 		lightDown = false;
 		lightCallback(false);
+		LPM3_EXIT;
 	}
 
 	if (!modeDown && counterMode >= COUNTER_TRIGGER_HIGH)
 	{
 		modeDown = true;
 		modeCallback(true);
+		LPM3_EXIT;
 	}
 	if (modeDown && counterMode <= COUNTER_TRIGGER_LOW)
 	{
 		modeDown = false;
 		modeCallback(false);
+		LPM3_EXIT;
 	}
 
 	if (debrun < DEB_RUNTIME)
@@ -104,7 +110,6 @@ void __attribute__((interrupt((TIMER1_A1_VECTOR)))) TimerA1_1_ISR(void)
 	{
 		TA1CTL &= ~MC_3;
 	}
-	LPM3_EXIT;
 }
 
 bool get_button_alarm()
