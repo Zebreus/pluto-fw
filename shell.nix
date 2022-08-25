@@ -51,6 +51,18 @@ let
       version = "1.1.0";
       sha256 = "0416qprq9rnzl9na3fxhs9wnmws9zfm473qxnvji2vy752l4wxr4";
     }
+        {
+      name = "beyond-debug";
+      publisher = "coolchyni";
+      version = "0.9.6";
+      sha256 = "BOupyP5DEDMfxeqg5alfADFses9ff6yUQeeYb+liuLw=";
+    }
+    #      {
+    #         name = "vscode-clangd";
+    #   publisher = "llvm-vs-code-extensions";
+    #   version = "0.1.21";
+    #   sha256 = "EioP9CbQLBlAEa3mzmBhpH/SGWOqCWef+gFyuZHZ7aI=";
+    # }
     ];
   };
 in
@@ -59,5 +71,5 @@ pkgs.mkShell {
   shellHook = ''
     export LD_LIBRARY_PATH="${pkgs.mspds}/lib";
   '';
-  nativeBuildInputs = with pkgs; [ crossPkgs.buildPackages.gcc crossPkgs.buildPackages.gdb mspds mspdebug zeromq python gnumake mbedtls pulseaudio pkgconfig gobject-introspection gtk3 lsof gdb vscode];
+  nativeBuildInputs = with pkgs; [ crossPkgs.buildPackages.gcc crossPkgs.buildPackages.gdb mspds mspdebug zeromq python gnumake mbedtls pulseaudio pkgconfig gobject-introspection gtk3 lsof gdb vscode clang_14];
 }
