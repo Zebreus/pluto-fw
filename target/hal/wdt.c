@@ -1,7 +1,6 @@
 #include <msp430.h>
 #include "wdt.h"
-#include "common/hal/lcd_segments.h"
-#include "common/svc/svc.h"
+#include "lcd_segments.h"
 
 void wdt_clear(void)
 {

@@ -445,7 +445,7 @@ SECTIONS
      Symbols in the DWARF debugging sections are relative to the beginning
      of the section so we begin them at 0.  */
   /* DWARF 1.  */
-  .debug          0 : { *(.debug) }
+  .debug          0 : { *(.debug .debug.* .debug_end) }
   .line           0 : { *(.line) }
   /* GNU DWARF 1 extensions.  */
   .debug_srcinfo  0 : { *(.debug_srcinfo) }

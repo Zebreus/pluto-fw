@@ -16,8 +16,8 @@ import fw.queue;
 extern "C"
 {
 #include "common/svc/svc.h"
-#include "common/hal/hal.h"
-#include "common/hal/lcd_segments.h"
+#include "hal.h"
+#include "lcd_segments.h"
 }
 
 // #include "common/app/cpp/framework/hooks/useState.hpp"
@@ -40,6 +40,9 @@ export void frameworkInit()
     if (rootComponent == nullptr)
     {
         rootComponent = new ComponentData(&root, {});
+    }
+    if (current == nullptr)
+    {
         current = rootComponent;
     }
 }

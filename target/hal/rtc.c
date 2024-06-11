@@ -1,7 +1,7 @@
 #include <msp430.h>
 #include "rtc.h"
 #include "common/svc/util.h"
-#include "common/hal/hal.h"
+#include "hal.h"
 #include "platform.h"
 
 static volatile hal_rtc_timedate_t timedate_l;

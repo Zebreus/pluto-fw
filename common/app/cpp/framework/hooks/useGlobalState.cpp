@@ -52,7 +52,6 @@ GlobalActionValue<ValueType> useGlobalState(const ValueType &&defaultValue)
         void *data = current->getHookData();
         if (!data)
         {
-            bool found = false; // Only for debugging
             for (int i = 0; i < MAX_AFFECTED_COMPONENTS; i++)
             {
                 if (!affectedComponents[i])
@@ -60,13 +59,8 @@ GlobalActionValue<ValueType> useGlobalState(const ValueType &&defaultValue)
                     affectedComponents[i] = current;
                     current->setHookData(&(affectedComponents[i]), [](const void *x)
                                          { *((ComponentData **)x) = nullptr; });
-                    found = true;
                     break;
                 }
-            }
-            if (!found)
-            {
-                volatile int x = 5;
             }
         }
     }

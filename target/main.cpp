@@ -10,10 +10,9 @@ extern "C"
 #include "hal/aux_timer.h"
 #include "hal/compass.h"
 #include "hal/aes/aes256.h"
-#include "common/hal/lcd_segments.h"
-#include "common/hal/hal.h"
+#include "hal/lcd_segments.h"
+#include "hal/hal.h"
 #include "common/svc/svc.h"
-#include "common/svc/otp/oath.h"
 }
 
 import fw.event;
@@ -85,7 +84,9 @@ extern "C" int main(void)
 
 		// P9OUT |= BIT5;
 		hal_lcd_set_mode(HAL_LCD_MODE_BUFFERED);
+		hal_lcd_seg_set(HAL_LCD_SEG_24H, 1);
 		workQueue();
+		hal_lcd_seg_set(HAL_LCD_SEG_24H, 1);
 		hal_lcd_update();
 		// P9OUT &= ~BIT5;
 	}

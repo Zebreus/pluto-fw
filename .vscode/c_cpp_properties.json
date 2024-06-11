@@ -10,11 +10,16 @@
                 "${workspaceFolder}/common/app",
                 "${workspaceFolder}/common/app/cpp",
                 "${workspaceFolder}/common/app/cpp/framework",
-                "/nix/store/sw5xd8c9jiaby950q93nl20sybz5bbar-msp430-gcc-support-files-1.207/include"
+                "/nix/store/sw5xd8c9jiaby950q93nl20sybz5bbar-msp430-gcc-support-files-1.207/include",
+                "${workspaceFolder}/target/hal"
             ],
             "defines": [
                 "MBEDTLS_CONFIG_FILE=\\\"../common/svc/otp/mbedtls/mbedtls_config.h\\\"",
                 "__MSP430FR6972__"
+            ],
+            "compilerArgs": [
+                "-fmodules-ts",
+                "-fmodule-mapper=\"|/nix/store/f1idgwsw2ag93nb7lbycn2cs2h7ihf23-msp430-elf-stage-final-gcc-debug-12.1.0/libexec/gcc/msp430-elf/12.1.0/g++-mapper-server --root /home/lennart/Documents/pluto-fw/gcm.cache -f"
             ],
             "cStandard": "c11",
             "cppStandard": "c++20",

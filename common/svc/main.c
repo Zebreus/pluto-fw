@@ -1,8 +1,7 @@
 #include "svc.h"
 #include "aux_timer.h"
-#include "common/hal/hal.h"
-#include "common/hal/lcd_segments.h"
-#include "common/app/cpp/entrypoint.h"
+#include "hal.h"
+#include "lcd_segments.h"
 #include <unistd.h>
 #include <stdio.h>
 
@@ -39,7 +38,6 @@ void svc_main_proc(svc_main_proc_event_t event)
 		// 		app_view_changed = 0;
 		// 	}
 		// }
-		entrypoint(event);
 	}
 
 	// if(svc_rtc_adj_get_pending()) {

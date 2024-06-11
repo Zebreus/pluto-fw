@@ -1,6 +1,7 @@
 #include "init.h"
-#include "common/hal/hal.h"
+#include "hal.h"
 
-void svc_init(void) {
+void svc_init(void)
+{
 	hal_aes_init();
 }

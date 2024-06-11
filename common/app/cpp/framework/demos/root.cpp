@@ -13,6 +13,7 @@ import fw.state;
 
 export std::vector<ComponentData *> root(State *state, const std::vector<int> &params)
 {
+    state->alarm = true;
     auto demoComponent = new ComponentData(timeDisplay, {});
     return {demoComponent};
 }

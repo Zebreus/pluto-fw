@@ -154,7 +154,7 @@
       "type": "shell",
       "detail": "Start the debug server",
       "isBackground": true,
-      "command": "mspdebug tilib \"opt color true\" \"sym import+ ${workspaceRoot}/target/output/target/main.elf\" \"reset\" \"gdb\"",
+      "command": "mspdebug tilib \"opt color true\" \"sym import+ ${workspaceRoot}/target/lx.elf\" \"reset\" \"gdb\"",
     },
   ]
 }

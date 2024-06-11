@@ -67,7 +67,7 @@
       "name": "Debug beyond",
       "type": "by-gdb",
       "request": "launch",
-      "program": "${workspaceRoot}/target/output/target/main.elf",
+      "program": "${workspaceRoot}/target/lx.elf",
       "cwd": "${workspaceRoot}",
       "debuggerPath": "msp430-elf-gdb",
       "preLaunchTask": "gdbserver",
@@ -75,7 +75,7 @@
         "enabled": true,
         "address": ":2000",
         "mode": "remote",
-        "execfile": "${workspaceRoot}/target/output/target/main.elf"
+        "execfile": "${workspaceRoot}/target/lx.elf"
       },
       "presentation": {
         "order": 3,

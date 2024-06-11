@@ -57,12 +57,18 @@ let
       version = "0.9.6";
       sha256 = "BOupyP5DEDMfxeqg5alfADFses9ff6yUQeeYb+liuLw=";
     }
-    #      {
-    #         name = "vscode-clangd";
-    #   publisher = "llvm-vs-code-extensions";
-    #   version = "0.1.21";
-    #   sha256 = "EioP9CbQLBlAEa3mzmBhpH/SGWOqCWef+gFyuZHZ7aI=";
-    # }
+            {
+      name = "mesonbuild";
+      publisher = "mesonbuild";
+      version = "1.7.0";
+      sha256 = "pHHPHF+y5tu0IG6hbdM1LJLlDia0cnRLLWDBBP81TnU=";
+    }
+                {
+      name = "cmake";
+      publisher = "twxs";
+      version = "0.0.17";
+      sha256 = "CFiva1AO/oHpszbpd7lLtDzbv1Yi55yQOQPP/kCTH4Y=";
+    }
     ];
   };
 in
@@ -71,5 +77,5 @@ pkgs.mkShell {
   shellHook = ''
     export LD_LIBRARY_PATH="${pkgs.mspds}/lib";
   '';
-  nativeBuildInputs = with pkgs; [ crossPkgs.buildPackages.gcc crossPkgs.buildPackages.gdb mspds mspdebug zeromq python gnumake mbedtls pulseaudio pkgconfig gobject-introspection gtk3 lsof gdb vscode clang_14];
+  nativeBuildInputs = with pkgs; [ crossPkgs.buildPackages.gcc crossPkgs.buildPackages.gdb mspds mspdebug zeromq python gnumake mbedtls pulseaudio pkgconfig gobject-introspection gtk3 lsof gdb vscode clang_14 meson cmake];
 }

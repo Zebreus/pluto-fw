@@ -17,4 +17,5 @@ bool useTime()
 {
     GlobalActionValue<unsigned long> time = useGlobalState<4, unsigned long>(0);
     unsigned long unixTime = time.get();
+    return false;
 }

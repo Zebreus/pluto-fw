@@ -1,7 +1,7 @@
 #include "menu.h"
 #include "lcd.h"
 #include "util.h"
-#include "common/hal/hal.h"
+#include "hal.h"
 #include "platform.h"
 
 extern const uint8_t app_time_display_view;
